@@ -1,5 +1,47 @@
-venv/
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.so
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Environment files (NEVER commit secrets)
 .env
-node_modules/
+.env.local
+
+# User-uploaded answer sheets (never commit student data)
+uploads/
+!uploads/.gitkeep
+
+# Trained / downloaded ML models (large binaries)
+models/
+!models/.gitkeep
+
+# IDE / OS junk
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Training artefacts
+training/data/raw/
+training/data/processed/
+training/results.json
+training/runs/
+
+# Legacy folder kept for reference, but don't track copies
+templates_old/
+# SQLite local DB
+app.db
+*.db-journal

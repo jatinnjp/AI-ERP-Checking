@@ -1,0 +1,28 @@
+# ----- Web framework -----
+Flask>=3.0,<4.0
+Werkzeug>=3.0
+python-dotenv>=1.0
+
+# ----- Deep learning core -----
+torch>=2.1
+torchvision>=0.16
+
+# ----- NLP / Transformers -----
+transformers>=4.40
+sentence-transformers>=2.7
+
+# ----- OCR -----
+easyocr>=1.7
+opencv-python-headless>=4.9
+Pillow>=10.0
+pdf2image>=1.17
+imutils>=0.5
+
+# ----- ML / metrics -----
+scikit-learn>=1.4
+numpy>=1.26
+pandas>=2.0
+nltk>=3.8
+
+# ----- Utilities -----
+tqdm>=4.66
