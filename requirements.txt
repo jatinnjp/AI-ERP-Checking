@@ -26,3 +26,6 @@ nltk>=3.8
 
 # ----- Utilities -----
 tqdm>=4.66
+
+
+google-cloud-vision>=3.7

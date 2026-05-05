@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Teacher Dashboard{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>My Tests</h2>
+    <a href="{{ url_for('teacher.test_new') }}" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> New Test
+    </a>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr><th>#</th><th>Name</th><th>Questions</th><th>Submitted Sheets</th><th>Created</th><th></th></tr>
+            </thead>
+            <tbody>
+                {% for t in tests %}
+                <tr>
+                    <td>{{ t.test_id }}</td>
+                    <td>{{ t.test_name }}</td>
+                    <td>{{ t.qcount }}</td>
+                    <td>{{ t.scount }}</td>
+                    <td><small class="text-muted">{{ t.created_at }}</small></td>
+                    <td class="text-end">
+                        <a href="{{ url_for('teacher.test_manage', test_id=t.test_id) }}" class="btn btn-sm btn-outline-primary">Manage</a>
+                        <a href="{{ url_for('teacher.test_sheets', test_id=t.test_id) }}" class="btn btn-sm btn-outline-secondary">Sheets</a>
+                        <a href="{{ url_for('teacher.test_scores', test_id=t.test_id) }}" class="btn btn-sm btn-outline-success">Scores</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="6" class="text-center text-muted py-4">No tests yet. Click "New Test" to create one.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

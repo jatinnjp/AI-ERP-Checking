@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}My Results{% endblock %}
+
+{% block content %}
+<h2 class="mb-3">My Results</h2>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th><th>Test</th><th>Status</th>
+                    <th>Score</th><th>%</th><th>Uploaded</th><th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in rows %}
+                <tr>
+                    <td>{{ r.sheet_id }}</td>
+                    <td>{{ r.test_name }}</td>
+                    <td>
+                        <span class="badge bg-{{ {'done':'success','processing':'warning','failed':'danger','pending':'secondary'}[r.ocr_status] }}">
+                            {{ r.ocr_status }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if r.total_score is not none %}
+                            <strong>{{ "%.1f"|format(r.total_score) }}</strong> / {{ "%.0f"|format(r.max_total or 0) }}
+                        {% else %} - {% endif %}
+                    </td>
+                    <td>
+                        {% if r.total_score and r.max_total %}
+                        {% set pct = r.total_score / r.max_total * 100 %}
+                        <span class="badge bg-{{ 'success' if pct>=60 else 'warning' if pct>=40 else 'danger' }}">
+                            {{ "%.1f"|format(pct) }}%
+                        </span>
+                        {% else %} - {% endif %}
+                    </td>
+                    <td><small class="text-muted">{{ r.uploaded_at }}</small></td>
+                    <td class="text-end">
+                        <a href="{{ url_for('student.sheet_results', sheet_id=r.sheet_id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="7" class="text-center text-muted py-4">
+                    No results yet. Go to <a href="{{ url_for('student.home') }}">Available Tests</a> to upload your first sheet.
+                </td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -45,3 +45,8 @@ templates_old/
 # SQLite local DB
 app.db
 *.db-journal
+
+
+# Google Cloud credentials — NEVER commit
+gcp-credentials.json
+*-credentials.json

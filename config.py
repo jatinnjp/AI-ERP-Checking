@@ -38,7 +38,11 @@ class Config:
 
     # ----- OCR -----
     OCR_MIN_CONFIDENCE = float(os.getenv("OCR_MIN_CONFIDENCE", "0.40"))
-
+    USE_TROCR = os.getenv("USE_TROCR", "0") == "1"
+    USE_GCP_VISION = os.getenv("USE_GCP_VISION", "0") == "1"
+    GCP_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS", "gcp-credentials.json")
+    USE_OCRSPACE = os.getenv("USE_OCRSPACE", "0") == "1"
+    OCRSPACE_API_KEY = os.getenv("OCRSPACE_API_KEY", "")
 
 # Make sure required folders exist
 Config.UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
