@@ -1,0 +1,1 @@
+"""Route blueprints: admin, teacher, student."""

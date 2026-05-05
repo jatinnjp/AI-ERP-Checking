@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Manage: {{ test.test_name }}{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('teacher.home') }}" class="text-decoration-none">&larr; Back to my tests</a>
+<h2 class="mt-2">{{ test.test_name }}</h2>
+<p class="text-muted">Manage questions and reference (model) answers.</p>
+
+<div class="row mt-3">
+    <div class="col-md-7">
+        <div class="card p-3">
+            <h5>Existing Questions ({{ questions|length }})</h5>
+            {% for q in questions %}
+            <div class="border rounded p-3 mb-2">
+                <div class="d-flex justify-content-between">
+                    <strong>Q{{ loop.index }}.</strong>
+                    <span class="badge bg-info">{{ q.max_marks }} marks</span>
+                </div>
+                <div>{{ q.question_text }}</div>
+                <div class="mt-2">
+                    <span class="text-muted small">Reference answer:</span>
+                    <div class="text-muted fst-italic">{{ q.reference_answer or '(none)' }}</div>
+                </div>
+                <form method="post" action="{{ url_for('teacher.question_delete', qid=q.question_id) }}"
+                      class="mt-2 text-end" onsubmit="return confirm('Delete this question?');">
+                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                </form>
+            </div>
+            {% else %}
+            <div class="text-muted text-center py-3">No questions yet — add some on the right →</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="card p-3">
+            <h5>Add Question</h5>
+            <form method="post">
+                <div class="mb-3">
+                    <label class="form-label">Question text *</label>
+                    <textarea name="question_text" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Reference answer *</label>
+                    <textarea name="reference_answer" class="form-control" rows="4" required
+                              placeholder="The model answer the student should ideally write."></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Max marks</label>
+                    <input name="max_marks" type="number" min="1" max="100" step="0.5"
+                           value="10" class="form-control">
+                </div>
+                <button class="btn btn-primary w-100">Add Question</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Scores: {{ test.test_name }}{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('teacher.home') }}" class="text-decoration-none">&larr; Back to my tests</a>
+<h2 class="mt-2">Scores for: {{ test.test_name }}</h2>
+
+<div class="card mt-3">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr><th>Rank</th><th>Student</th><th>Score</th><th>Max</th><th>%</th><th>Submitted</th></tr>
+            </thead>
+            <tbody>
+                {% for r in rows %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td><a href="{{ url_for('teacher.sheet_review', sheet_id=r.sheet_id) }}">{{ r.student_name }}</a></td>
+                    <td><strong>{{ "%.2f"|format(r.total_score or 0) }}</strong></td>
+                    <td>{{ "%.0f"|format(r.max_total or 0) }}</td>
+                    <td>
+                        {% set pct = (r.total_score / r.max_total * 100) if r.max_total else 0 %}
+                        <span class="badge bg-{{ 'success' if pct>=60 else 'warning' if pct>=40 else 'danger' }}">
+                            {{ "%.1f"|format(pct) }}%
+                        </span>
+                    </td>
+                    <td><small class="text-muted">{{ r.uploaded_at }}</small></td>
+                </tr>
+                {% else %}
+                <tr><td colspan="6" class="text-center text-muted py-4">No submissions yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

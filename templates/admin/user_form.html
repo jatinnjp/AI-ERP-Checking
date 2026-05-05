@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if user else 'New' }} User{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h2>{{ 'Edit' if user else 'New' }} User</h2>
+        <div class="card p-4 mt-3">
+            <form method="post">
+                {% if not user %}
+                <div class="mb-3">
+                    <label class="form-label">Username *</label>
+                    <input name="username" class="form-control" required>
+                </div>
+                {% endif %}
+                <div class="mb-3">
+                    <label class="form-label">Password {% if user %}(leave blank to keep current){% else %}*{% endif %}</label>
+                    <input name="password" type="password" class="form-control" {% if not user %}required{% endif %}>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Role *</label>
+                    <select name="role" class="form-select">
+                        {% for r in ['admin','teacher','student'] %}
+                        <option value="{{ r }}" {{ 'selected' if user and user.role==r }}>{{ r }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Full name</label>
+                    <input name="full_name" class="form-control" value="{{ user.full_name or '' if user else '' }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input name="email" type="email" class="form-control" value="{{ user.email or '' if user else '' }}">
+                </div>
+                <button class="btn btn-primary">{{ 'Save' if user else 'Create' }}</button>
+                <a href="{{ url_for('admin.users') }}" class="btn btn-link">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

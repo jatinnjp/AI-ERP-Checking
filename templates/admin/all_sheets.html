@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}All Sheets &middot; Admin{% endblock %}
+
+{% block content %}
+<h2 class="mb-3">All Submitted Answer Sheets</h2>
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr><th>#</th><th>Student</th><th>Test</th><th>Status</th><th>Uploaded</th></tr>
+            </thead>
+            <tbody>
+                {% for s in sheets %}
+                <tr>
+                    <td>{{ s.sheet_id }}</td>
+                    <td>{{ s.student_name }}</td>
+                    <td>{{ s.test_name }}</td>
+                    <td>
+                        <span class="badge bg-{{ {'done':'success','processing':'warning','failed':'danger','pending':'secondary'}[s.ocr_status] }}">
+                            {{ s.ocr_status }}
+                        </span>
+                    </td>
+                    <td><small class="text-muted">{{ s.uploaded_at }}</small></td>
+                </tr>
+                {% else %}
+                <tr><td colspan="5" class="text-center text-muted py-4">No sheets uploaded yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

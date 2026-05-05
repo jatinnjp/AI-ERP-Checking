@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}All Tests &middot; Admin{% endblock %}
+
+{% block content %}
+<h2 class="mb-3">All Tests in System</h2>
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr><th>#</th><th>Name</th><th>Teacher</th><th>Questions</th><th>Sheets</th><th>Created</th></tr>
+            </thead>
+            <tbody>
+                {% for t in tests %}
+                <tr>
+                    <td>{{ t.test_id }}</td>
+                    <td>{{ t.test_name }}</td>
+                    <td>{{ t.teacher_name }}</td>
+                    <td>{{ t.qcount }}</td>
+                    <td>{{ t.scount }}</td>
+                    <td><small class="text-muted">{{ t.created_at }}</small></td>
+                </tr>
+                {% else %}
+                <tr><td colspan="6" class="text-center text-muted py-4">No tests yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

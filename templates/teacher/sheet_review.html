@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Review Sheet #{{ sheet.sheet_id }}{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('teacher.test_sheets', test_id=sheet.test_id) }}" class="text-decoration-none">&larr; Back to sheets</a>
+<h2 class="mt-2">Sheet #{{ sheet.sheet_id }} &mdash; {{ sheet.full_name or sheet.student_name }}</h2>
+<p class="text-muted">{{ sheet.test_name }} &middot; uploaded {{ sheet.uploaded_at }}
+   &middot; status: <span class="badge bg-secondary">{{ sheet.ocr_status }}</span></p>
+
+{% if sheet.ocr_error %}
+<div class="alert alert-warning"><strong>OCR note:</strong> {{ sheet.ocr_error }}</div>
+{% endif %}
+
+<div class="row mt-3">
+    <div class="col-md-5">
+        <h5>Original upload</h5>
+        {% if sheet.file_type == 'image' %}
+        <img src="{{ url_for('teacher.sheet_file', sheet_id=sheet.sheet_id) }}"
+             class="img-fluid border rounded" alt="Answer sheet">
+        {% else %}
+        <a href="{{ url_for('teacher.sheet_file', sheet_id=sheet.sheet_id) }}"
+           class="btn btn-outline-primary" target="_blank">
+            <i class="bi bi-file-earmark-pdf"></i> Open PDF
+        </a>
+        {% endif %}
+
+        <h5 class="mt-4">Cleaned OCR text</h5>
+        <pre class="text-block">{{ sheet.cleaned_text or '(empty)' }}</pre>
+    </div>
+
+    <div class="col-md-7">
+        <h5>Per-question grading</h5>
+        {% for r in rows %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <strong>Q{{ loop.index }}.</strong>
+                    <span class="badge bg-info">Max: {{ r.max_marks }}</span>
+                </div>
+                <div class="text-muted">{{ r.question_text }}</div>
+
+                <div class="mt-2"><strong>Reference:</strong>
+                    <div class="text-muted fst-italic small">{{ r.reference_answer or '(none)' }}</div>
+                </div>
+                <div class="mt-2"><strong>Student wrote:</strong>
+                    <div class="small">{{ r.student_answer or '(empty)' }}</div>
+                </div>
+
+                {% if r.grade_id %}
+                <div class="mt-2 d-flex align-items-center gap-3">
+                    <span>AI score: <strong>{{ r.ai_score }}</strong></span>
+                    <span class="text-muted small">similarity: {{ "%.3f"|format(r.similarity or 0) }}</span>
+                </div>
+
+                <form method="post" action="{{ url_for('teacher.grading_override', grade_id=r.grade_id) }}"
+                      class="mt-2 d-flex gap-2 align-items-center">
+                    <input type="hidden" name="sheet_id" value="{{ sheet.sheet_id }}">
+                    <label class="form-label mb-0">Final score:</label>
+                    <input name="final_score" type="number" step="0.5" min="0" max="{{ r.max_marks }}"
+                           value="{{ r.final_score }}" class="form-control" style="max-width:120px;">
+                    <button class="btn btn-sm btn-success">Save</button>
+                    {% if r.overridden_at %}
+                    <span class="text-muted small">(overridden {{ r.overridden_at }})</span>
+                    {% endif %}
+                </form>
+                {% else %}
+                <div class="text-muted small mt-2">Not yet graded.</div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
